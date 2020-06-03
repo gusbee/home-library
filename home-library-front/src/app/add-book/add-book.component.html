@@ -1,0 +1,11 @@
+<form (ngSubmit) = "onSubmit(form)" class="form-inline" #form = "ngForm">
+    <label for="search">Enter ISBN Code (type 13)</label>
+    <input type="text" class="form-control" name="search_isbn" id="search" ngModel>
+    <button class="btn btn-primary" type="submit">Search</button>
+</form>
+
+<div *ngIf = "book !== undefined">
+    <p>
+        {{ book.title }}
+    </p>
+</div>
