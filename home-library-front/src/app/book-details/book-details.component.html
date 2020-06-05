@@ -19,7 +19,12 @@
     (ngSubmit)="onSubmit(loanForm)" 
     #loanForm="ngForm">
         <div class="form-group">
-            <legend class="card-header">Informations prêt</legend>
+            <div class="form-group card-header d-flex justify-content-between align-items-center">
+                <legend>Informations prêt</legend>
+                <h6 *ngIf="book.onLoan" class="text-danger">Indisponible</h6>
+                <h6 *ngIf="!book.onLoan" class="text-success">Disponible</h6>
+            </div>
+            
             <fieldset class="card-body">
 
                 <div class="form-group row">
