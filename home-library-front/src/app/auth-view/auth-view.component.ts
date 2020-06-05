@@ -1,6 +1,8 @@
-import { Component, OnInit, Injectable } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
+import { BooksService } from '../services/books.service';
 
 @Component({
   selector: 'app-auth-view',
@@ -10,22 +12,75 @@ import { NgForm } from '@angular/forms';
   
 export class AuthViewComponent implements OnInit {
 
-  email: string;
-  password: string;
-  auth: boolean = false;
+  error_message: string;
+  spinner = false;
+  sign = "in";
 
-  constructor( private authService: AuthService ) { }
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private booksService: BooksService
+  ) { }
 
   ngOnInit(): void {
   }
 
-  onSubmit( form: NgForm) {
-    this.signUp(form.value["user_email"], form.value["user_password"]);
+  onSignUpSubmit = (form: NgForm) => {
+    const email = form.value["user_email"];
+    const password = form.value["user_password"];
+    this.spinner = true;
+
+    this.authService.signUp(email, password)
+      .then(response => {
+        if (response === "exists") {
+          this.error_message = "Compte existant avec cette adresse email.";
+          this.spinner = false;
+        } else {
+          this.spinner = false;
+          this.router.navigate(["/"]);
+        }
+      })
+      .catch(error => console.error("Error: ", error));
   }
 
-  signUp(email: string, password: string) {
-    this.authService.signUp(email, password);
+  onSignInSubmit = (form: NgForm) => {
+    const email = form.value["user_email"];
+    const password = form.value["user_password"];
+    this.spinner = true;
+
+    this.authService.signIn(email, password)
+      .then(response => {
+        console.log(response);
+        switch (response) {
+          case "no account":
+            this.error_message = "Aucun compte avec cette adresse email."
+            this.spinner = false;
+            break;
+          case "wrong password":
+            this.error_message = "Mot de passe incorrecte."
+            this.spinner = false;
+            break;
+          case "signed in":
+            this.booksService.getBooksFromDatabase()
+              .then(() => {
+                this.spinner = false;
+                this.router.navigate(["/"]);
+              })
+              .catch((error) => console.error("Error: ", error))
+            break
+        }
+      })
+      .catch(error => console.error("Error: ", error));
   }
+
+  handleSign = () => {
+    if (this.sign === "up") {
+      this.sign = "in";
+    } else {
+      this.sign = "up";
+    }
+  }
+
 
 
 }

@@ -1,94 +1,104 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Subject } from 'rxjs/Subject';
-import 'rxjs/Rx';
+import { AuthService } from './auth.service';
 
 @Injectable()
-export class BooksService implements OnInit {
+export class BooksService {
 
-    booksSubject = new Subject<any[]>();
     bookFromApi: any;
-
-    private books = [];
+    library: any = [];
 
     constructor(
-        private httpClient: HttpClient
-    ) { }
-
-    ngOnInit() {
-        this.getBooksFromServer();
-    }
-    
-    emitBooksSubject() {
-        this.booksSubject.next(this.books.slice());
-    }
-
-    // Save library in darabase
-    saveBooksToServer() {
-        this.httpClient
-            .put("https://home-library-28d67.firebaseio.com/books.json", this.books)
-            .subscribe(
-                () => {
-                    console.log("Library saved successfully.");
-                },
-                (error) => {
-                    console.log("Error : ", error);
-                }
-            )
-    }
-
-    // Get all books from database
-    getBooksFromServer() {
-        this.httpClient
-            .get<any[]>("https://home-library-28d67.firebaseio.com/books.json")
-            .subscribe(
-                (response) => {
-                    if (response !== null) {
-                        this.books = response;
-                        this.emitBooksSubject();
-                    }
-                },
-                (error) => {
-                    console.log("Loading error: ", error);
-                }
-        )
+        private httpClient: HttpClient,
+        private authService: AuthService,
+    ) {
     }
 
     // Get book from API by Isbn code
-    getBookFromApiByIsbn(search: string) {
-        this.httpClient
+    getBookFromApiByIsbn = (search: string) => {
+        return new Promise((resolve, reject) => {
+            this.httpClient
             .get<any[]>("https://www.googleapis.com/books/v1/volumes?q=isbn:" + search + "&key=AIzaSyB4MXsCfHEuOfsNGPdJU3viII_SyjsxDjE")
             .subscribe(
                 (response) => {
-                    if (response["totalItems"] > 0) {
-                        this.bookFromApi = response["items"][0].volumeInfo;
-                    } else {
-                        console.log("No result")
-                    }
+                    resolve(response);
                 },
                 (error) => {
-                    console.log("Error: ", error);
+                    reject(error);
                 },
                 () => {
                     console.log("Completed !");
                 }
         )
+        });
     }
 
-    test(isbn: string) {
-        this.httpClient
-            .post('http://localhost:3000/add', { isbn: isbn })
+    // Update the library in database
+    updateLibraryInDatabase = (library: any) => {
+        return new Promise((resolve, reject) => {
+            this.httpClient
+                .post("http://localhost:3000/update-library", { data: library, email:  this.authService.email}, { responseType: "text" })
+                .subscribe(
+                    (response) => {
+                        console.log(response);
+                        resolve(response);
+                    },
+                    (error) => {
+                        reject(error);
+                    },
+                    () => {
+                        console.log("Update Database Complete");
+                    }
+            )
+        })
+    }
+
+    // Get the user's library
+    getBooksFromDatabase = () => {
+        return new Promise((resolve, reject) => {
+            this.httpClient
+            .post("http://localhost:3000/library", { email: this.authService.email })
             .subscribe(
                 (response) => {
-                    console.log("Post request OK");
+                    this.library = response;
+                    resolve();
                 },
                 (error) => {
-                    console.log("Post request failed");
+                    reject(error);
                 },
                 () => {
-                    console.log("request completed");
+                    console.log("getBooksFromDatabase Complete");
                 }
-        )
+            )
+        })
+        
     }
+
+    // Add a book to the user library in local
+    addBookToLibrary = (book: any) => {
+        this.library.push(book);
+        this.updateLibraryInDatabase(this.library)
+    }
+
+    // Mise à jour des informations de prêt d'un libre
+    updateLoanInformation = (book: any, loanDetails: any) => {
+        this.library.forEach((element: any, index: number) => {
+            if (book.isbn === element.isbn) {
+            
+                if (this.library[index].onLoan) {
+                    this.library[index].onLoan = false;
+                    this.library[index].loanDetails = loanDetails;
+                    this.updateLibraryInDatabase(this.library);
+                } else {
+                    this.library[index].onLoan = true;
+                    this.library[index].loanDetails = loanDetails;
+                    this.updateLibraryInDatabase(this.library);
+                }
+                
+            }
+        });
+    }
+
+
     
 }

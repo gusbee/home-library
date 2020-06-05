@@ -1,0 +1,16 @@
+.search-form{
+    width: 100%;
+    padding: 1rem 0;
+    background-color: #FFF;
+    border-bottom: solid 1px grey;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    top: 56px;
+    left: 0;
+    z-index: 1;
+}
+
+.books-list{
+    margin-top: calc( 112px + 2rem );
+}

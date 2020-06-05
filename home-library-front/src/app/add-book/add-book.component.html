@@ -1,11 +1,78 @@
-<form (ngSubmit) = "onSubmit(form)" class="form-inline" #form = "ngForm">
-    <label for="search">Enter ISBN Code (type 13)</label>
-    <input type="text" class="form-control" name="search_isbn" id="search" ngModel>
-    <button class="btn btn-primary" type="submit">Search</button>
-</form>
+<div class="search-form">
+    <!-- The form -->
+    <form 
+    (ngSubmit) = "onSubmit(form)" 
+    class="form-inline" 
+    #form = "ngForm">
 
-<div *ngIf = "book !== undefined">
-    <p>
-        {{ book.title }}
-    </p>
+        <label for="search" 
+        class="mr-3">
+            Entrez un code ISBN (type 13)
+        </label>
+
+        <input 
+        type="text" 
+        class="form-control" 
+        name="search_isbn" 
+        id="search" 
+        ngModel>
+
+        <button 
+        class="btn btn-primary" 
+        type="submit">
+            Rechercher
+        </button>
+
+    </form>
+
+    <!-- The message -->
+    <div id="error-msg" 
+    *ngIf = "message === 'error isbn'">
+        <p class="alert alert-danger" >
+            Veuillez entrer un code ISBN (type 13) valide. 
+        </p>
+    </div>
+
 </div>
+
+<!-- The positiv result -->
+<div *ngIf = "message === 'book found'" 
+class="search-result">
+    <!-- Cover & Main information -->
+    <div id="book-main-information">
+        <!-- Book's cover thumbnail -->
+        <div>    
+            <img src="{{ cover_link }}" alt="" />
+        </div>
+
+        <!-- Book's  main information -->
+        <div>
+            <h2>{{ title }}</h2>
+            <p>{{ authors }}</p>
+            <p>{{ publisher }} - {{ published_date | date: 'mediumDate' }} - {{ pages }} pages</p>
+        </div>
+    </div>
+
+    <!-- Book's description -->
+    <div id="book-description">
+        <p>{{ description }}</p>
+        <p>ISBN : {{ isbn }}</p>
+    </div>
+
+    <!-- Add to library button -->
+    <div id="book-add-library">
+        <button class="btn btn-primary" (click)="addBook()">
+            Ajouter à ma librairie
+        </button>
+        <p class="alert alert-success" *ngIf = "added">
+            Livre ajouté à la librairie avec succès.
+        </p>
+    </div>
+    
+    
+
+
+</div>
+    
+<!-- The no found result -->
+<p *ngIf = "message === 'no result'">Cet ISBN n'existe pas</p>

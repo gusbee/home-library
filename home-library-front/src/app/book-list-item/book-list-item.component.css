@@ -1,0 +1,15 @@
+.loan-status{
+    width: 15px;
+    height: 15px;
+}
+
+.item-inline{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.title-and-status{
+    display: flex;
+    align-items: center;
+}

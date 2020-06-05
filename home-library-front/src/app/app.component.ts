@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { BooksService } from './services/books.service';
+import { Component } from '@angular/core';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -8,13 +8,13 @@ import { BooksService } from './services/books.service';
 })
 export class AppComponent {
   
-  books: any[];
+  isAuth = this.authService.isAuth;
 
   constructor( 
-    private booksService: BooksService
-  ) { }
-  
-  ngOnInit() {
-    
-  }
+    private authService: AuthService
+  ) {
+
+   }
+
+
 }

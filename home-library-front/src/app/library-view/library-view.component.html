@@ -1,5 +1,79 @@
-<ul class="list-group" *ngIf = "books.length > 0">
-    <li class="list-group-item" *ngFor = "let book of books">
-        <p>{{ book.title }}</p>
-    </li>
-</ul>
+<!-- The Form -->
+<div class="search-form mb-3">
+    <form 
+    class="form-inline mr-3" 
+    (ngSubmit)="onSubmit(libraryForm)" 
+    #libraryForm="ngForm">
+        
+        <select 
+        class="form-control mr-3" 
+        name="search_by" 
+        id="search_by" 
+        ngModel>
+            <option value=""> --- Filtrer par ---</option>
+            <option value="title">Titre</option>
+            <option value="authors">Auteur</option>
+            <option value="genders">Genre</option>
+            <option value="isbn">Code ISBN</option>
+        </select>
+        <input 
+        type="text" 
+        class="form-control mr-3" 
+        name="search_value" 
+        id="search_value" 
+        placeholder="Recherche" 
+        ngModel />
+
+        <button 
+        type="submit" 
+        class="btn btn-primary">
+            Filtrer
+        </button>
+
+    </form>
+
+    <button class="btn btn-primary" 
+    (click) = "clearSearch()">
+        Réinitialiser
+    </button>
+</div>
+
+<div class="row books-list">
+
+    <!-- List of books -->
+    <div class="col-4" 
+    *ngIf = "filtered[0] === 'no filter'">
+        <h1>Mes livres</h1>
+
+        <ul class="list-group">
+            <app-book-list-item 
+            *ngFor = "let book of library"
+             [book] = "book"
+             (details) = "onDetails($event)">
+            </app-book-list-item>
+        </ul>
+    </div>
+
+    <div class="col-4" *ngIf = "filtered[0] !== 'no filter'">
+        <h1>Mes livres</h1>
+
+        <h4 *ngIf = "filtered[0] === 'no result'">Aucun résultat.</h4>
+
+        <ul class="list-group" *ngIf = "filtered[0] !== 'no result'">
+             <app-book-list-item 
+            *ngFor = "let book of filtered"
+             [book] = "book"
+             (details) = "onDetails($event)">
+            </app-book-list-item>
+        </ul>
+    </div>
+
+    <!-- Search form -->
+    <div class="col-8">
+        <app-book-details 
+        *ngIf = "book !== undefined" 
+        [book] = "book">
+        </app-book-details>
+    </div>
+</div>
+

@@ -1,0 +1,17 @@
+<li class="list-group-item list-group-item-action item-inline mb-3" 
+(click) = "showDetails(book)">
+
+    <div class="title-and-status">
+
+        <div [ngClass] = "{
+            'bg-danger': book.onLoan ?  true : false,
+            'bg-success': book.onLoan ? false : true
+        }" 
+        class="loan-status mr-3 rounded-circle">
+        </div>
+
+        <h5>{{ book.title }}</h5>
+
+    </div>
+    
+</li>

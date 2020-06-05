@@ -12,11 +12,11 @@ import { AuthGuard } from './services/auth-guard.service';
 import { BooksService } from './services/books.service';
 import { LibraryViewComponent } from './library-view/library-view.component';
 import { AddBookComponent } from './add-book/add-book.component';
+import { BookListItemComponent } from './book-list-item/book-list-item.component';
+import { BookDetailsComponent } from './book-details/book-details.component';
 
 const appRoutes: Routes = [
-  { path: "library", canActivate: [AuthGuard], component: LibraryViewComponent },
   { path: "add-book", canActivate: [AuthGuard], component: AddBookComponent },
-  { path: "test", canActivate: [AuthGuard], component: AppComponent },
   { path: "auth", component: AuthViewComponent },
   { path: "", canActivate: [AuthGuard], component: LibraryViewComponent },
   { path: "**", redirectTo: "" }
@@ -27,7 +27,9 @@ const appRoutes: Routes = [
     AppComponent,
     AuthViewComponent,
     LibraryViewComponent,
-    AddBookComponent
+    AddBookComponent,
+    BookListItemComponent,
+    BookDetailsComponent
   ],
   imports: [
     BrowserModule,
