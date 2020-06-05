@@ -11,10 +11,10 @@
         class="card-body" >
             <div class="form-group">
                 <input 
-                type="email" 
-                name="user_email" 
+                type="text" 
+                name="user_id" 
                 class="form-control mb-3" 
-                placeholder="Email" 
+                placeholder="Identifiant" 
                 ngModel>
 
                 <input 
@@ -61,10 +61,10 @@
         <form (ngSubmit) = "onSignInSubmit(signIn)" #signIn="ngForm" >
             <div class="form-group">
                 <input 
-                    type="email" 
-                    name="user_email" 
+                    type="text" 
+                    name="user_id" 
                     class="form-control mb-3" 
-                    placeholder="Email" 
+                    placeholder="Identifiant" 
                     ngModel>
                 <input 
                     type="password" 

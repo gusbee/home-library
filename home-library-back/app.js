@@ -20,7 +20,7 @@ app.post("/sign-up", async (req, res, next) => {
 
     let { db_client, db_connection } = await connect();
     
-    db_connection.collection("users").findOne({ email: req.body.email }, (err, result) => {
+    db_connection.collection("users").findOne({ user_id: req.body.id }, (err, result) => {
         if (err) throw err;
 
         db_client.close();
@@ -50,7 +50,7 @@ app.post("/sign-in", async (req, res) => {
 
     let { db_client, db_connection } = await connect();
 
-    db_connection.collection("users").findOne({ email: req.body.email }, (err, result) => {
+    db_connection.collection("users").findOne({ user_id: req.body.id }, (err, result) => {
         if (err) throw err;
 
         db_client.close();
@@ -73,7 +73,7 @@ app.post("/update-library", async (req, res) => {
     let { db_client, db_connection } = await connect();
 
     db_connection.collection("users").updateOne(
-        { email: req.body.email },
+        { user_id: req.body.id },
         { $set: { books: req.body.data }}, (err, result) => {
             if (err) throw err;
 
@@ -87,9 +87,7 @@ app.post("/library", async (req, res) => {
 
     let { db_client, db_connection } = await connect();
 
-    console.log(req.body);
-
-    db_connection.collection("users").findOne({...req.body}, (err, result) => {
+    db_connection.collection("users").findOne({user_id: req.body.id}, (err, result) => {
         if (err) throw err;
 
         db_client.close();

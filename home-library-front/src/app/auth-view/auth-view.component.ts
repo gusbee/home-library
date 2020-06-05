@@ -26,14 +26,14 @@ export class AuthViewComponent implements OnInit {
   }
 
   onSignUpSubmit = (form: NgForm) => {
-    const email = form.value["user_email"];
+    const id = form.value["user_id"];
     const password = form.value["user_password"];
     this.spinner = true;
 
-    this.authService.signUp(email, password)
+    this.authService.signUp(id, password)
       .then(response => {
         if (response === "exists") {
-          this.error_message = "Compte existant avec cette adresse email.";
+          this.error_message = "Identifiant déjà utilisé.";
           this.spinner = false;
         } else {
           this.spinner = false;
@@ -44,16 +44,16 @@ export class AuthViewComponent implements OnInit {
   }
 
   onSignInSubmit = (form: NgForm) => {
-    const email = form.value["user_email"];
+    const id = form.value["user_id"];
     const password = form.value["user_password"];
     this.spinner = true;
 
-    this.authService.signIn(email, password)
+    this.authService.signIn(id, password)
       .then(response => {
         console.log(response);
         switch (response) {
           case "no account":
-            this.error_message = "Aucun compte avec cette adresse email."
+            this.error_message = "Aucun compte avec cet identifiant."
             this.spinner = false;
             break;
           case "wrong password":

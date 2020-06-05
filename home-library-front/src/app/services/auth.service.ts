@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 @Injectable()
 export class AuthService {
     
-    email: string;
+    id: string;
     error_message: string;
     isAuth: boolean = false;
 
@@ -12,20 +12,20 @@ export class AuthService {
         private httpClient: HttpClient,
     ) { }
 
-    setEmail (email: string) {
-        this.email = email;
+    setId (id: string) {
+        this.id = id;
     }
 
     // Create new user
-    signUp = (email: string, password: string) => {
+    signUp = (id: string, password: string) => {
         return new Promise((resolve, reject) => {
             this.httpClient
-                .post("http://localhost:3000/sign-up", { email: email, password: password }, { responseType: "text" })
+                .post("http://localhost:3000/sign-up", { user_id: id, password: password }, { responseType: "text" })
                 .subscribe(
                     (response) => {
                         if (response === "create") {
                             this.isAuth = true;
-                            this.email = email;
+                            this.id = id;
                         }
                         resolve(response);
                     },
@@ -36,15 +36,15 @@ export class AuthService {
         });
     }
 
-    signIn = (email: string, password: string) => {
+    signIn = (id: string, password: string) => {
         return new Promise((resolve, reject) => {
             this.httpClient
-                .post("http://localhost:3000/sign-in", { email: email, password: password }, { responseType: "text" })
+                .post("http://localhost:3000/sign-in", { id: id, password: password }, { responseType: "text" })
                 .subscribe(
                     (response) => {
                         if (response === "signed in") {
                             this.isAuth = true;
-                            this.email = email;
+                            this.id = id;
                         }
                         resolve(response);
                     },
