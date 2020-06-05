@@ -57,7 +57,7 @@ export class AddBookComponent implements OnInit {
     this.published_date = new Date(data["publishedDate"]);
     this.description = data["description"];
     this.pages = data["pageCount"];
-    this.genders = data["categories"].join(", ");
+    this.genders = data["categories"].toString();
     this.cover_link = data["imageLinks"].smallThumbnail;
     this.isbn = isbn;
   }
