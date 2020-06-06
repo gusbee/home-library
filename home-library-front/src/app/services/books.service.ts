@@ -18,7 +18,7 @@ export class BooksService {
     getBookFromApiByIsbn = (search: string) => {
         return new Promise((resolve, reject) => {
             this.httpClient
-            .get<any[]>("https://www.googleapis.com/books/v1/volumes?q=isbn:" + search + "&key=AIzaSyB4MXsCfHEuOfsNGPdJU3viII_SyjsxDjE")
+            .get<any[]>("https://www.googleapis.com/books/v1/volumes?q=isbn:" + search + "&key=your_api_key")
             .subscribe(
                 (response) => {
                     resolve(response);
