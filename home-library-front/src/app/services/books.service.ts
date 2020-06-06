@@ -80,7 +80,7 @@ export class BooksService {
         this.updateLibraryInDatabase(this.library)
     }
 
-    // Mise à jour des informations de prêt d'un libre
+    // Update loan information
     updateLoanInformation = (book: any, loanDetails: any) => {
         this.library.forEach((element: any, index: number) => {
             if (book.isbn === element.isbn) {
@@ -99,6 +99,9 @@ export class BooksService {
         });
     }
 
-
+    deleteBook = (index: number) => {
+        this.library.splice(index, 1);
+        this.updateLibraryInDatabase(this.library);
+    }
     
 }

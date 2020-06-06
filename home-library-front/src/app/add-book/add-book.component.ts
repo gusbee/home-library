@@ -24,13 +24,13 @@ export class AddBookComponent implements OnInit {
 
   constructor( 
     private booksService: BooksService,
-    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
   }
 
   onSubmit(form: NgForm) {
+    this.added = false;
     const isbn = form.value["search_isbn"];
 
     if (this.isbnControl(isbn)) {

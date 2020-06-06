@@ -9,10 +9,11 @@ import { BooksService } from '../services/books.service';
 export class BookListItemComponent implements OnInit {
 
   @Input() book: any;
+  @Input() filter = "";
+  @Input() index: number;
   @Output() details = new EventEmitter<any>();
 
-  constructor( ) {
-   }
+  constructor( private booksService: BooksService) {}
 
   ngOnInit(): void {
   }
@@ -25,8 +26,11 @@ export class BookListItemComponent implements OnInit {
   }
 
   showDetails = (book: any) => {
-    console.log(book);
     this.details.emit(book);
+  }
+
+  deleteBook = (index: number) => {
+    this.booksService.deleteBook(index);
   }
 
 }

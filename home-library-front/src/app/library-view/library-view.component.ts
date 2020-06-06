@@ -12,6 +12,7 @@ export class LibraryViewComponent implements OnInit {
   library: any;
   book: any;
   filtered = ["no filter"];
+  filter = "";
 
   constructor(
     private booksService: BooksService
@@ -25,15 +26,19 @@ export class LibraryViewComponent implements OnInit {
   onSubmit(form: NgForm) {
     switch (form.value["search_by"]) {
       case "title":
+        this.filter = "titre";
         this.findByTitle(form.value["search_value"]);
         break;
       case "authors":
+        this.filter = "auteur";
         this.findByAuthor(form.value["search_value"]);
         break;
       case "genders":
+        this.filter = "genre";
         this.findByGender(form.value["search_value"]);
         break;
       case "isbn":
+        this.filter = "code isbn";
         this.findByIsbn(form.value["search_value"]);
     }
   }
@@ -103,6 +108,7 @@ export class LibraryViewComponent implements OnInit {
   
   clearSearch = () => { 
     this.filtered = ["no filter"];
+    this.filter = "";
   }
   
   onDetails = (book: any) => {

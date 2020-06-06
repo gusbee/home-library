@@ -9,7 +9,19 @@
     justify-content: space-between;
 }
 
+.item-inline:hover > .details{
+    display: block;
+}
+
 .title-and-status{
     display: flex;
     align-items: center;
+}
+
+h5{
+    margin: 0;
+}
+
+.details{
+    display: none;
 }
